@@ -4,6 +4,7 @@ import { getMetricMetaInfo } from '../utils/helpers'
 
 import Slider from './Slider'
 import Stepper from './Stepper'
+import DateHeader from './DateHeader'
 
 
 const buildInitialState = () =>
@@ -49,6 +50,7 @@ export default class AddEntry extends Component {
     const metaInfo = getMetricMetaInfo();
     return (
       <View>
+        <DateHeader date={new Date()} />
         { Object.keys(metaInfo).map((key) => {
             const { getIcon, type, ...rest } = metaInfo[key]
             const value = this.state[key]
