@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
-import { getMetricMetaInfo, timeToString } from '../utils/helpers'
+import { getDailyRemainder, getMetricMetaInfo, timeToString } from '../utils/helpers'
 import { Ionicons } from '@expo/vector-icons'
+import { connect } from 'react-redux'
 
 import TextButton from './TextButton'
 import Slider from './Slider'
@@ -9,6 +10,7 @@ import Stepper from './Stepper'
 import DateHeader from './DateHeader'
 
 import { submitEntry, removeEntry } from '../utils/api'
+import { addEntry } from '../actions'
 
 
 function SubmitButton (props) {
@@ -32,7 +34,8 @@ function ResetButton (props) {
 const buildInitialState = () =>
   Object.keys(getMetricMetaInfo()).reduce((acc, k) => ({...acc, [k]: 0}), {});
 
-export default class AddEntry extends Component {
+
+class AddEntry extends Component {
   state = buildInitialState()
 
   increment = (metric) => {
@@ -75,7 +78,10 @@ export default class AddEntry extends Component {
     this.setState(buildInitialState)
 
     // update redux
-    //
+    this.props.dispatch(addEntry({
+      [key]: entry,
+    }))
+
     // navigato to home
 
     // save to DB
@@ -87,10 +93,11 @@ export default class AddEntry extends Component {
   reset = () => {
     const key = timeToString()
 
-    alert(`reset = ${key}`);
-
     // update redux
-    //
+    this.props.dispatch(addEntry({
+      [key]: getDailyRemainder(),
+    }))
+
     // navigato to home
     //
 
@@ -137,11 +144,23 @@ export default class AddEntry extends Component {
             )
           })
         }
-      <SubmitButton onPress={this.submit} />
-      <Text>
-        { JSON.stringify(this.state, null, '  ') }
-      </Text>
+        <SubmitButton onPress={this.submit} />
+        <Text>
+          { JSON.stringify(this.props, null, '  ') }
+        </Text>
       </View>
     )
   }
 }
+
+
+function mapStateToProps (state) {
+  const key = timeToString()
+  return {
+    debug: state,
+    alreadyLogged: !!(state && state[key] && !state[key].today),
+  }
+}
+
+
+export default connect(mapStateToProps)(AddEntry);
