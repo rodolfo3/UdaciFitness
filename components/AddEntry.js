@@ -8,6 +8,8 @@ import Slider from './Slider'
 import Stepper from './Stepper'
 import DateHeader from './DateHeader'
 
+import { submitEntry, removeEntry } from '../utils/api'
+
 
 function SubmitButton (props) {
   return (
@@ -75,9 +77,10 @@ export default class AddEntry extends Component {
     // update redux
     //
     // navigato to home
-    //
+
     // save to DB
-    //
+    submitEntry({ key, entry })
+
     // Clear local notification
   }
 
@@ -90,7 +93,9 @@ export default class AddEntry extends Component {
     //
     // navigato to home
     //
+
     // save to DB
+    removeEntry({ key })
   }
 
   render() {
