@@ -41,14 +41,14 @@ export default class AddEntry extends Component {
   decrement = (metric) => {
     const { min = 0, step } = getMetricMetaInfo(metric)
 
-   this.setState((state) => {
-      const count = state[metric] - step;
+    this.setState((state) => {
+       const count = state[metric] - step;
 
-      return {
-        ...state,
-        [metric]: count < min ? min : count,
-      }
-    });
+       return {
+         ...state,
+         [metric]: count < min ? min : count,
+       }
+     });
   }
 
   slide = (metric, value) => {
