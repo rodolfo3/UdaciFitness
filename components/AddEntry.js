@@ -1,21 +1,29 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { getMetricMetaInfo, timeToString } from '../utils/helpers'
+import { Ionicons } from '@expo/vector-icons'
 
+import TextButton from './TextButton'
 import Slider from './Slider'
 import Stepper from './Stepper'
 import DateHeader from './DateHeader'
 
 
-function SubmitButton ({ onPress }) {
+function SubmitButton (props) {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-    >
-      <Text>Submit</Text>
-    </TouchableOpacity>
-
+    <TextButton {...props}>
+      Submit
+    </TextButton>
   );
+}
+
+
+function ResetButton (props) {
+  return (
+    <TextButton {...props}>
+      Reset
+    </TextButton>
+  )
 }
 
 
@@ -73,7 +81,29 @@ export default class AddEntry extends Component {
     // Clear local notification
   }
 
+  reset = () => {
+    const key = timeToString()
+
+    alert(`reset = ${key}`);
+
+    // update redux
+    //
+    // navigato to home
+    //
+    // save to DB
+  }
+
   render() {
+    if (this.props.alreadyLogged) {
+      return (
+        <View>
+          <Ionicons name='ios-happy-outline' size={100} />
+          <Text>You already logged your information for today</Text>
+          <ResetButton onPress={this.reset} />
+        </View>
+      )
+    }
+
     const metaInfo = getMetricMetaInfo();
     return (
       <View>
