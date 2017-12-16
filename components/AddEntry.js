@@ -1,10 +1,22 @@
 import React, { Component } from 'react'
-import { View, Text} from 'react-native'
-import { getMetricMetaInfo } from '../utils/helpers'
+import { View, Text, TouchableOpacity } from 'react-native'
+import { getMetricMetaInfo, timeToString } from '../utils/helpers'
 
 import Slider from './Slider'
 import Stepper from './Stepper'
 import DateHeader from './DateHeader'
+
+
+function SubmitButton ({ onPress }) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+    >
+      <Text>Submit</Text>
+    </TouchableOpacity>
+
+  );
+}
 
 
 const buildInitialState = () =>
@@ -46,6 +58,21 @@ export default class AddEntry extends Component {
     }))
   }
 
+  submit = () => {
+    const key = timeToString()
+    const entry = this.state
+
+    this.setState(buildInitialState)
+
+    // update redux
+    //
+    // navigato to home
+    //
+    // save to DB
+    //
+    // Clear local notification
+  }
+
   render() {
     const metaInfo = getMetricMetaInfo();
     return (
@@ -75,6 +102,7 @@ export default class AddEntry extends Component {
             )
           })
         }
+      <SubmitButton onPress={this.submit} />
       </View>
     )
   }
