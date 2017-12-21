@@ -1,19 +1,35 @@
 import React, { Component } from 'react'
-import { View, Slider, Text} from 'react-native'
+import { View, Slider, Text, StleSheet } from 'react-native'
+import { gray } from '../utils/colors'
 
-export default function UdacitySlider ({ max, units, step, value, onChange }) {
+
+const styles = {
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  metricCounter: {
+    width: 85,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+}
+
+export default function UdacitySlider ({ max, unit, step, value, onChange }) {
   return (
-    <View>
+    <View style={styles.row}>
       <Slider
+        style={{flex: 1}}
         step={step}
         value={value}
         maximumValue={max}
         minimumValue={0}
         onValueChange={onChange}
       />
-      <View>
-        <Text>{ value }</Text>
-        <Text>{ units }</Text>
+      <View style={styles.metricCounter}>
+        <Text style={{ fontSize: 24, textAlign: 'center'}}>{ value }</Text>
+        <Text style={{ fontSize: 18, textAlign: 'center', color: gray}}>{ unit }</Text>
       </View>
     </View>
   );
