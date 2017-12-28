@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 
 import reducer from './reducers'
 import AddEntry from './components/AddEntry';
+import History from './components/History';
 
 export default class App extends React.Component {
   render() {
@@ -12,7 +13,7 @@ export default class App extends React.Component {
       <Provider store={createStore(reducer)}>
         <View style={{flex: 1}}>
           <View style={{ height: 20, backgroundColor: 'gray' }} />
-          <AddEntry />
+          <History />
         </View>
       </Provider>
     );
