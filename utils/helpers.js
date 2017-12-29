@@ -151,6 +151,7 @@ export function calculateDirection (heading) {
   return direction
 }
 
+
 export function timeToString (time = Date.now()) {
   const date = new Date(time)
   const todayUTC = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
@@ -159,5 +160,11 @@ export function timeToString (time = Date.now()) {
 
 
 export function getDailyRemainder () {
-  today: "Don't forget to log your data today!"
+  return {
+    today: "Don't forget to log your data today!"
+  }
+}
+
+
+export function getDailyRemainderValue () {
 }
