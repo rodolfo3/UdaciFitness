@@ -64,6 +64,33 @@ const styles = StyleSheet.create({
 }) 
 
 
+function Heading ({ direction }) {
+  return (
+    <View style={styles.directionContainer}>
+      <Text style={styles.header}>
+        You're heading
+      </Text>
+      <Text style={styles.direction}>
+        North
+      </Text>
+    </View>
+  )
+}
+
+
+function Metric ({ name, value }) {
+  return (
+    <View style={styles.metric}>
+      <Text style={[styles.header, { color: white }]}>
+        {name}
+      </Text>
+      <Text style={[styles.subHeader, { color: white }]}>
+        {value}
+      </Text>
+    </View>
+  )
+}
+
 class Live extends Component {
   state = {
     coords: null,
@@ -112,31 +139,10 @@ class Live extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.directionContainer}>
-          <Text style={styles.header}>
-            You're heading
-          </Text>
-          <Text style={styles.direction}>
-            North
-          </Text>
-        </View>
+        <Heading direction={'South'} />
         <View style={styles.metricContainer}>
-          <View style={styles.metric}>
-            <Text style={[styles.header, { color: white }]}>
-              Altitude
-            </Text>
-            <Text style={[styles.subHeader, { color: white }]}>
-              { 200 } Feet
-            </Text>
-          </View>
-          <View style={styles.metric}>
-            <Text style={[styles.header, { color: white }]}>
-              Speed
-            </Text>
-            <Text style={[styles.subHeader, { color: white }]}>
-              { 300 } MHP
-            </Text>
-          </View>
+          <Metric name="Altitude" value={`${300} Feet`} />
+          <Metric name="Speed" value={`${150} MPH`} />
         </View>
       </View>
     );
