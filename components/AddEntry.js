@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native
 import { getDailyRemainder, getMetricMetaInfo, timeToString } from '../utils/helpers'
 import { Ionicons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 
 import TextButton from './TextButton'
 import Slider from './Slider'
@@ -94,6 +95,12 @@ class AddEntry extends Component {
     }))
   }
 
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({
+      key: 'AddEntry',
+    }))
+  }
+
   submit = () => {
     const key = timeToString()
     const entry = this.state
@@ -106,6 +113,7 @@ class AddEntry extends Component {
     }))
 
     // navigato to home
+    this.toHome()
 
     // save to DB
     submitEntry({ key, entry })
@@ -122,7 +130,7 @@ class AddEntry extends Component {
     }))
 
     // navigato to home
-    //
+    this.toHome()
 
     // save to DB
     removeEntry({ key })
