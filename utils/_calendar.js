@@ -7,13 +7,16 @@ function getRandomNumber (max) {
   return Math.floor(Math.random() * max) + 0
 }
 
+
+const DAYS = 4
+
 function setDummyData () {
   const { run, bike, swim, sleep, eat } = getMetricMetaInfo()
 
   let dummyData = {}
   const timestamp = Date.now()
 
-  for (let i = -183; i < 0; i++) {
+  for (let i = -DAYS; i < 0; i++) {
     const time = timestamp + i * 24 * 60 * 60 * 1000
     const strTime = timeToString(time)
     dummyData[strTime] = getRandomNumber(3) % 2 === 0
@@ -36,7 +39,7 @@ function setMissingDates (dates) {
   const length = Object.keys(dates).length
   const timestamp = Date.now()
 
-  for (let i = -183; i < 0; i++) {
+  for (let i = -DAYS; i < 0; i++) {
     const time = timestamp + i * 24 * 60 * 60 * 1000
     const strTime = timeToString(time)
 
@@ -49,6 +52,7 @@ function setMissingDates (dates) {
 }
 
 export function formatCalendarResults (results) {
+  // return setMissingDates(JSON.parse(results || '{}'))
   return results === null
     ? setDummyData()
     : setMissingDates(JSON.parse(results))
