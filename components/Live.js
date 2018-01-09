@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
 import { Foundation } from '@expo/vector-icons'
-import { Location } from 'expo'
+import { Location, Permissions } from 'expo'
+import { calculateDirection } from '../utils/helpers'
 import { connect } from 'react-redux'
+
 
 import { purple, white } from '../utils/colors'
 
@@ -71,7 +73,7 @@ function Heading ({ direction }) {
         You're heading
       </Text>
       <Text style={styles.direction}>
-        North
+        { direction }
       </Text>
     </View>
   )
@@ -94,13 +96,55 @@ function Metric ({ name, value }) {
 class Live extends Component {
   state = {
     coords: null,
-    status: 'granted',
+    status: null,
     direction: '',
   }
 
+  componentDidMount() {
+    Permissions.getAsync(Permissions.LOCATION)
+      .then(({ status }) => {
+        console.log('Location status:', status)
+
+        if (status === 'granted') {
+          return this.setLocation()
+        }
+
+        this.setState({ status })
+      })
+      .catch((error) => {
+        console.warn('Error getting permission', error)
+        this.setState({ status: 'undetermined' })
+      });
+  }
 
   askPermission = () => {
-    console.log('askPermission');
+    Permissions.askAsync(Permissions.LOCATION)
+      .then(({ status }) => {
+        if (status === 'granted') {
+          return this.setLocation()
+        }
+        this.setState({ status })
+      })
+      .catch((error) => {
+        console.warn('Error getting permission', error)
+        this.setState({ status: 'undetermined' })
+      });
+  }
+
+  setLocation = () => {
+    Location.watchPositionAsync({
+      enableHighAccuracy: true,
+      timeInterval: 1,
+      distanceInterval: 1,
+    }, ({ coords }) => {
+      const newDirection = calculateDirection(coords.heading)
+      const { direction } = this.state
+      this.setState({
+        coords,
+        status: 'granted',
+        direction: newDirection,
+      })
+    })
   }
 
   render() {
@@ -109,19 +153,7 @@ class Live extends Component {
       return <ActivityIndicator style={{marginTop: 30}} />
     }
 
-    if (status === 'denied') {
-      return (
-        <View style={styles.center}>
-          <Foundation name='alert' size={50} />
-          <Text>
-            You denied location.
-            You can fix this by visiting your settings... bla
-          </Text>
-        </View>
-      )
-    }
-
-    if (status === 'undetermined') {
+    if (status !== 'granted') {
       return (
         <View style={styles.center}>
           <Foundation name='alert' size={50} />
@@ -139,10 +171,10 @@ class Live extends Component {
 
     return (
       <View style={styles.container}>
-        <Heading direction={'South'} />
+        <Heading direction={direction} />
         <View style={styles.metricContainer}>
-          <Metric name="Altitude" value={`${300} Feet`} />
-          <Metric name="Speed" value={`${150} MPH`} />
+          <Metric name="Altitude" value={`${coords.altitude} meters`} />
+          <Metric name="Speed" value={`${coords.speed} km/h`} />
         </View>
       </View>
     );
